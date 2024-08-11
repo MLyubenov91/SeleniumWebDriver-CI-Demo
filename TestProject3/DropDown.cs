@@ -1,9 +1,7 @@
-using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System.Collections.ObjectModel;
-using static System.Net.Mime.MediaTypeNames;
-using System.Xml.Linq;
 
 namespace TestProject3
 {
@@ -15,14 +13,32 @@ namespace TestProject3
         [SetUp]
         public void SetUp()
         {
+            ChromeOptions options = new ChromeOptions();
+            options.AddArguments("headless");
+            options.AddArguments("no-sandbox");
+            options.AddArguments("disable-dev-shm-usage");
+            options.AddArguments("disable-gpu");
+            options.AddArguments("window-size=1920x1080");
+            options.AddArguments("disable-extensions");
+            options.AddArguments("remote-debugging-port=9222");
+            options.AddArguments("--disable-search-engine-choise-screen");
+
             // Create object of ChromeDriver
-            driver = new ChromeDriver();
+            driver = new ChromeDriver(options);
 
             // Add implicit wait
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
         }
 
-        [Test]
+        [TearDown]
+        public void TearDown()
+        {
+
+            driver.Quit();
+            driver.Dispose();
+        }
+
+            [Test]
         public void TestSelectFromDropDown()
         {
             // Launch Chrome browser with the given URL
@@ -81,9 +97,6 @@ namespace TestProject3
                     }
                 }
             }
-
-            // Quit the driver
-            driver.Quit();
         }
     }
 }
